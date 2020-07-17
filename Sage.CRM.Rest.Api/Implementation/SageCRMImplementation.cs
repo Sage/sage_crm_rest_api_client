@@ -21,21 +21,36 @@ namespace Sage.CRM.Rest.Api.Implementation
             httpService.SetHeaderCredentials(userName, password);
             _baseUrl = baseUrl;
         }
-        public Task Add<T>(T entity)
+        public async Task Add<T>(T entity, string entityName = null)
+        {
+            if (string.IsNullOrEmpty(entityName))
+                entityName = typeof(T).Name;
+
+            var response = await httpService.Post($"{_baseUrl}/{entityName}", entity);
+            if (!response.Success)
+                throw new ApplicationException(await response.GetBody());
+        }
+        public async Task Delete<T>(int id, string entityName = null)
+        {
+            if (string.IsNullOrEmpty(entityName))
+                entityName = typeof(T).Name;
+
+            var response = await httpService.Delete($"{_baseUrl}/{entityName}('{id}')");
+            if (!response.Success)
+                throw new ApplicationException(await response.GetBody());
+        }
+        public async Task Delete(Expression expression)
         {
             throw new NotImplementedException();
         }
-        public Task Delete(int id)
+        public async Task Edit<T>(int id, T entity, string entityName = null)
         {
-            throw new NotImplementedException();
-        }
-        public Task Delete(Expression expression)
-        {
-            throw new NotImplementedException();
-        }
-        public Task Edit<T>(int id, T entity)
-        {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(entityName))
+                entityName = typeof(T).Name;
+
+            var response = await httpService.Put($"{_baseUrl}/{entityName}('{id}')", entity);
+            if (!response.Success)
+                throw new ApplicationException(await response.GetBody());
         }
 
 

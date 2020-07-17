@@ -12,6 +12,7 @@ namespace Sage.CRM.Rest.Tester.LocalModels
         [JsonPropertyName("$title")]
         public string Title { get; set; }
         public int Comp_CompanyID { get; set; }
+        public string Comp_Name { get; set; }
 
     }
 }

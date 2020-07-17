@@ -17,9 +17,9 @@ namespace Sage.CRM.Rest.Api.Interface
         Task<EntityFields> GetEntityFields(string entityName);
         Task<T> GetEntityFields<T>(string entityName);
 
-        Task Add<T>(T entity);
-        Task Delete(int id);
+        Task Add<T>(T entity, string entityName = null);
+        Task Delete<T>(int id, string entityName = null);
         Task Delete(Expression expression);
-        Task Edit<T>(int id, T entity);
+        Task Edit<T>(int id, T entity, string entityName = null);
     }
 }

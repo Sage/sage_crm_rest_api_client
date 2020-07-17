@@ -17,16 +17,19 @@ namespace Sage.CRM.Rest.Tester
 
         static void Main(string[] args)
         {
-            Run().GetAwaiter().GetResult();
-            //TestConverter();
-        }
-        static async Task Run()
-        {
             SageCRMRestClient client = new SageCRMBuilder()
-                                            .SetBaseUrl("http://99.80.0.12/sdata/crm2020j/sagecrm2/-/")
-                                            .SetLoginCredentials("admin","")
+                                            .SetBaseUrl("http://192.168.125.142/sdata/crm2020j/sagecrm2/-/")
+                                            .SetLoginCredentials("admin", "")
                                             .Build();
 
+            //Gets(client).GetAwaiter().GetResult();
+            //Posts(client).GetAwaiter().GetResult();
+            //Puts(client).GetAwaiter().GetResult();
+            //Delete(client).GetAwaiter().GetResult();
+            //TestConverter();
+        }
+        static async Task Gets(SageCRMRestClient client)
+        {
             //all tests
             //returns Prototypes
             var proto = await client.GetAllEntities();
@@ -53,6 +56,23 @@ namespace Sage.CRM.Rest.Tester
 
 
             Console.ReadLine();
+        }
+        static async Task Posts(SageCRMRestClient client)
+        {
+            Company company = new Company();
+            company.Comp_Name = "Conrad";
+            await client.Add(company);
+        }
+        static async Task Puts(SageCRMRestClient client)
+        {
+            CompanyPutModel put = new CompanyPutModel();
+            put.Comp_Name = "Conrad Put";
+
+            await client.Edit(1231, put, "company");
+        }
+        static async Task Delete(SageCRMRestClient client)
+        {
+            await client.Delete<Company>(1231);
         }
         static void TestConverter()
         {
