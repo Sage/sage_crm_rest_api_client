@@ -58,7 +58,7 @@ namespace Sage.CRM.Rest.Api.Implementation
             if (!response.Success)
                 throw new ApplicationException(await response.GetBody());
         }
-        public Task Edit(int id, string entityName, string entityData)
+        public async Task Edit(int id, string entityName, string entityData)
         {
             throw new NotImplementedException();
         }

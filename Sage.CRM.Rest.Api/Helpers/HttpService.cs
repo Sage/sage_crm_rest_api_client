@@ -13,10 +13,12 @@ namespace Sage.CRM.Rest.Api.Helpers
     {
         private readonly HttpClient httpClient;
         private JsonSerializerOptions defaultJsonSerializerOptions =>
-            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true,  };
-        public HttpService(/*username and password here?*/)
+            new JsonSerializerOptions() { 
+                PropertyNameCaseInsensitive = true, 
+                IgnoreNullValues = true, 
+                AllowTrailingCommas = true };
+        public HttpService()
         {
-            //probs set the header in here
             httpClient = new HttpClient();   
         }
         public HttpService SetHeaderCredentials(string userName, string password)
@@ -46,20 +48,6 @@ namespace Sage.CRM.Rest.Api.Helpers
                 return new HttpResponseWrapper<T>(default, false, responseHTTP);
             }
         }
-        public async Task<HttpResponseWrapper<object>> GetObject<T>(string url)
-        {
-            var responseHTTP = await httpClient.GetAsync(url);
-
-            if (responseHTTP.IsSuccessStatusCode)
-            {
-                var response = await Deserialize<T>(responseHTTP, defaultJsonSerializerOptions);
-                return new HttpResponseWrapper<object>(response, true, responseHTTP);
-            }
-            else
-            {
-                return new HttpResponseWrapper<object>(default, false, responseHTTP);
-            }
-        }
         public async Task<HttpResponseWrapper<object>> Post<T>(string url, T data)
         {
             string dataJson = "";
@@ -75,7 +63,7 @@ namespace Sage.CRM.Rest.Api.Helpers
         }
         public async Task<HttpResponseWrapper<object>> Put<T>(string url, T data)
         {
-            var dataJson = JsonSerializer.Serialize(data);
+            var dataJson = JsonSerializer.Serialize(data, defaultJsonSerializerOptions);
             var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
             var response = await httpClient.PutAsync(url, stringContent);
             return new HttpResponseWrapper<object>(null, response.IsSuccessStatusCode, response);

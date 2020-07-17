@@ -23,9 +23,8 @@ namespace Sage.CRM.Rest.Tester
                                             .Build();
 
             //Gets(client).GetAwaiter().GetResult();
-            Posts(client).GetAwaiter().GetResult();
-            //Puts(client).GetAwaiter().GetResult();
-            //Patch
+            //Posts(client).GetAwaiter().GetResult();
+            Puts(client).GetAwaiter().GetResult();
             //Delete(client).GetAwaiter().GetResult();
             //TestConverter();
         }
@@ -70,7 +69,8 @@ namespace Sage.CRM.Rest.Tester
         static async Task Puts(SageCRMRestClient client)
         {
             CompanyPutModel put = new CompanyPutModel();
-            put.Comp_Name = "Conrad Put";
+            //put.Comp_Name = "Conrad Put";
+            put.Comp_Website = "http://www.conrad.com";
 
             await client.Edit(1231, put, "company");
         }
