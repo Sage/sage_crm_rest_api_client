@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Net.Http.Headers;
+using Sage.CRM.Rest.Api.Models;
 
 namespace Sage.CRM.Rest.Api.Helpers
 {
@@ -61,10 +62,16 @@ namespace Sage.CRM.Rest.Api.Helpers
         }
         public async Task<HttpResponseWrapper<object>> Post<T>(string url, T data)
         {
-            var dataJson = JsonSerializer.Serialize(data);
+            string dataJson = "";
+            if (typeof(T).Name != "String")
+                dataJson = JsonSerializer.Serialize(data);
+            else
+                dataJson = data.ToString();
+            
             var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync(url, stringContent);
-            return new HttpResponseWrapper<object>(null, response.IsSuccessStatusCode, response);
+            var responseHTTP = await httpClient.PostAsync(url, stringContent);
+            var response = await Deserialize<object>(responseHTTP, defaultJsonSerializerOptions);
+            return new HttpResponseWrapper<object>(response, responseHTTP.IsSuccessStatusCode, responseHTTP);
         }
         public async Task<HttpResponseWrapper<object>> Put<T>(string url, T data)
         {

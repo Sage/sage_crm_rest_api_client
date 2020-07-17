@@ -21,12 +21,18 @@ namespace Sage.CRM.Rest.Api.Implementation
             httpService.SetHeaderCredentials(userName, password);
             _baseUrl = baseUrl;
         }
-        public async Task Add<T>(T entity, string entityName = null)
+        public async Task Add<T>(T entityData, string entityName = null)
         {
             if (string.IsNullOrEmpty(entityName))
                 entityName = typeof(T).Name;
 
-            var response = await httpService.Post($"{_baseUrl}/{entityName}", entity);
+            var response = await httpService.Post($"{_baseUrl}{entityName}", entityData);
+            if (!response.Success)
+                throw new ApplicationException(await response.GetBody());
+        }
+        public async Task Add(string entityName, string entityData)
+        {
+            var response = await httpService.Post($"{_baseUrl}{entityName}", entityData);
             if (!response.Success)
                 throw new ApplicationException(await response.GetBody());
         }
@@ -43,16 +49,19 @@ namespace Sage.CRM.Rest.Api.Implementation
         {
             throw new NotImplementedException();
         }
-        public async Task Edit<T>(int id, T entity, string entityName = null)
+        public async Task Edit<T>(int id, T entityData, string entityName = null)
         {
             if (string.IsNullOrEmpty(entityName))
                 entityName = typeof(T).Name;
 
-            var response = await httpService.Put($"{_baseUrl}/{entityName}('{id}')", entity);
+            var response = await httpService.Put($"{_baseUrl}/{entityName}('{id}')", entityData);
             if (!response.Success)
                 throw new ApplicationException(await response.GetBody());
         }
-
+        public Task Edit(int id, string entityName, string entityData)
+        {
+            throw new NotImplementedException();
+        }
 
         #region Gets
         public async Task<T> Get<T>(string entityName, int? id)
