@@ -13,20 +13,20 @@ namespace Sage.CRM.Rest.Tester
 {
     class Program
     {
-        static readonly HttpClient httpClient = new HttpClient();
-
         static void Main(string[] args)
         {
             SageCRMRestClient client = new SageCRMBuilder()
-                                            .SetBaseUrl("http://192.168.125.142/sdata/crm2020j/sagecrm2/-/")
+                                            .SetBaseUrl("http://192.168.125.133/sdata/crm2020j/sagecrm2/-/")
                                             .SetLoginCredentials("admin", "")
                                             .Build();
 
             //Gets(client).GetAwaiter().GetResult();
-            //Posts(client).GetAwaiter().GetResult();
-            Puts(client).GetAwaiter().GetResult();
+            Posts(client).GetAwaiter().GetResult();
+            //Puts(client).GetAwaiter().GetResult();
             //Delete(client).GetAwaiter().GetResult();
             //TestConverter();
+
+            Console.ReadLine();
         }
         static async Task Gets(SageCRMRestClient client)
         {
@@ -50,21 +50,19 @@ namespace Sage.CRM.Rest.Tester
 
 
             //get ALL from company with ResultPayload
-            var resultPayload2 = await client.Get("company", 1222);
+            //var resultPayload2 = await client.Get("company", 1222);
             //get ALL from company with Custom Class
-            Company ab = await client.Get<Company>("company", 1222);
-
-
-            Console.ReadLine();
+            //Company ab = await client.Get<Company>("company", 1222);
         }
         static async Task Posts(SageCRMRestClient client)
         {
-            Company company = new Company();
+            Comp company = new Comp();
             company.Comp_Name = "Conrad new 123";
-            await client.Add(company);
+            company.Comp_Website = "http://www.sage.com";
+            var result = await client.Add(company,"company");
 
-            //string companyData = "{ \"comp_name\" : \"Conrads New Company Method\" }";
-            //await client.Add("company",companyData);
+            string companyData = "{ \"comp_name\" : \"Conrads New Company Method\" }";
+            await client.Add(companyData,"company");
         }
         static async Task Puts(SageCRMRestClient client)
         {
@@ -95,5 +93,11 @@ namespace Sage.CRM.Rest.Tester
         public int ID { get; set; }
         public string Name { get; set; }
         public string Something { get; set; }
+    }
+
+    class Comp
+    {
+        public string Comp_Name { get; set; }
+        public string Comp_Website { get; set; }
     }
 }

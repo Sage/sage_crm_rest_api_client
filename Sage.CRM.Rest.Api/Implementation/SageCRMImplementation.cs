@@ -21,7 +21,7 @@ namespace Sage.CRM.Rest.Api.Implementation
             httpService.SetHeaderCredentials(userName, password);
             _baseUrl = baseUrl;
         }
-        public async Task Add<T>(T entityData, string entityName = null)
+        public async Task<object> Add<T>(T entityData, string entityName = null)
         {
             if (string.IsNullOrEmpty(entityName))
                 entityName = typeof(T).Name;
@@ -29,12 +29,16 @@ namespace Sage.CRM.Rest.Api.Implementation
             var response = await httpService.Post($"{_baseUrl}{entityName}", entityData);
             if (!response.Success)
                 throw new ApplicationException(await response.GetBody());
+
+            return response;
         }
-        public async Task Add(string entityName, string entityData)
+        public async Task<object> Add(string entityName, string entityData)
         {
             var response = await httpService.Post($"{_baseUrl}{entityName}", entityData);
             if (!response.Success)
                 throw new ApplicationException(await response.GetBody());
+
+            return response;
         }
         public async Task Delete<T>(int id, string entityName = null)
         {

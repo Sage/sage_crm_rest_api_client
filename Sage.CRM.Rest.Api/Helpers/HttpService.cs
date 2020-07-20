@@ -57,7 +57,8 @@ namespace Sage.CRM.Rest.Api.Helpers
                 dataJson = data.ToString();
             
             var stringContent = new StringContent(dataJson, Encoding.UTF8, "application/json");
-            var responseHTTP = await httpClient.PostAsync(url, stringContent);
+            HttpResponseMessage responseHTTP = await httpClient.PostAsync(url, stringContent);
+            responseHTTP.EnsureSuccessStatusCode();
             var response = await Deserialize<object>(responseHTTP, defaultJsonSerializerOptions);
             return new HttpResponseWrapper<object>(response, responseHTTP.IsSuccessStatusCode, responseHTTP);
         }
