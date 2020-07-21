@@ -7,6 +7,8 @@ namespace Sage.CRM.Rest.Tester.LocalModels
 {
     public class Company
     {
+        [JsonPropertyName("$key")]
+        public int Id { get; set; }
         [JsonPropertyName("$totalResults")]
         public int ResultsAmount { get; set; }
         [JsonPropertyName("$title")]

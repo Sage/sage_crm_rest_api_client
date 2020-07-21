@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Sage.CRM.Rest.Tester.LocalModels
 {
-    public class EntityFields
+    public class EntityField
     {
         [JsonPropertyName("$title")]
         public string Title { get; set; }

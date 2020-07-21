@@ -1,13 +1,12 @@
-﻿using System;
-using System.Linq.Expressions;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text.Json.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Sage.CRM.Rest.Api.Interface;
 
-using Sage.CRM.Rest.Api.Interface;
+using Sage.CRM.Rest.Api.Models;
+
 using Sage.CRM.Rest.Tester.LocalModels;
+
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Sage.CRM.Rest.Tester
 {
@@ -20,8 +19,8 @@ namespace Sage.CRM.Rest.Tester
                                             .SetLoginCredentials("admin", "")
                                             .Build();
 
-            //Gets(client).GetAwaiter().GetResult();
-            Posts(client).GetAwaiter().GetResult();
+            Gets(client).GetAwaiter().GetResult();
+            //Posts(client).GetAwaiter().GetResult();
             //Puts(client).GetAwaiter().GetResult();
             //Delete(client).GetAwaiter().GetResult();
             //TestConverter();
@@ -30,44 +29,66 @@ namespace Sage.CRM.Rest.Tester
         }
         static async Task Gets(SageCRMRestClient client)
         {
-            ////all tests
-            ////returns Prototypes
+            #region GetEntities
+            //returns Prototypes with Protypes class
             //var proto = await client.GetAllEntities();
-            ////returns myClass
+            //proto.EntityList.ForEach(entity => Console.WriteLine(entity.EntityName));
+            #endregion
+
+            #region CustomClass
+            //returns myClass
             //ProtosClass protosClass = await client.GetAllEntities<ProtosClass>();
-            
-            
-            ////get entity fields
-            //var entities = await client.GetEntityFields("company");
-            ////get entity fields with custom class
-            //EntityFields entityFields = await client.GetEntityFields<EntityFields>("company");
-            
-            
-            ////get ALL from company with ResultPayload
-            //var resultPayload = await client.Get("company");
-            ////get ALL from company with Custom Class
-            //Company a = await client.Get<Company>("company", null);
+            //Console.WriteLine(protosClass.Title);
+            #endregion
 
+            #region EntityFields
+            //get entity fields
+            //var entities = await client.GetEntityFields("address");
+            //foreach (KeyValuePair<string, Field> entries in entities.Fields)
+            //{
+            //    Console.WriteLine($"{entries.Key} : {entries.Value.Type}");
+            //}
+            #endregion
 
+            #region CustomEntity
+            //get entity fields with custom class
+            //EntityField entityFields = await client.GetEntityFields<EntityField>("company");
+            #endregion
+
+            #region All Entity Fields
             //get ALL from company with ResultPayload
-            //var resultPayload2 = await client.Get("company", 1222);
+            var resultPayload = await client.Get("company");
+            resultPayload.Records.ForEach(rec => Console.WriteLine($"{rec.RecordId} : {rec.Name}"));
+            #endregion
+
+            #region Entity Fields with custom 
             //get ALL from company with Custom Class
-            //Company ab = await client.Get<Company>("company", 1222);
+            Company a = await client.Get<Company>("company", null);
+            #endregion
+
+            #region Get Comp by ID
+            //get ALL from company with ResultPayload
+            var resultPayload2 = await client.Get("company", 1222);
+            #endregion
+
+            #region CustomClass by ID
+            //get ALL from company with Custom Class
+            Company ab = await client.Get<Company>("company", 1222);
+            #endregion
         }
         static async Task Posts(SageCRMRestClient client)
         {
-            Comp company = new Comp();
+            Company company = new Company();
             company.Comp_Name = "Conrad new 123";
-            company.Comp_Website = "http://www.sage.com";
-            var result = await client.Add(company,"company");
+            var result = await client.Add(company, "company");
 
+            //second example
             string companyData = "{ \"comp_name\" : \"Conrads New Company Method\" }";
             await client.Add(companyData,"company");
         }
         static async Task Puts(SageCRMRestClient client)
         {
             CompanyPutModel put = new CompanyPutModel();
-            //put.Comp_Name = "Conrad Put";
             put.Comp_Website = "http://www.conrad.com";
 
             await client.Edit(1231, put, "company");
@@ -78,23 +99,14 @@ namespace Sage.CRM.Rest.Tester
         }
         static void TestConverter()
         {
-            Car car = new Car();
-            car.ID = 1;
-            car.Name = "Ford";
-            car.Something = "Something else";
+            Comp comp = new Comp();
+            comp.Comp_Name = "testname";
+            comp.Comp_Website = "Ford";
 
-            string a = EntityConverter.ToJson(car);
-            Car newCar = EntityConverter.ToEntity<Car>(a);
+            string a = EntityConverter.ToJson(comp);
+            Comp newComp = EntityConverter.ToEntity<Comp>(a);
         }
     }
-
-    class Car
-    {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public string Something { get; set; }
-    }
-
     class Comp
     {
         public string Comp_Name { get; set; }
