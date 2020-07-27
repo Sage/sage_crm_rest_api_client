@@ -12,12 +12,14 @@ Usings that are required:
 The Models are only required if you are not going to use generics and use the Models from the project rather.
 
 ## Creating the client usage
+```
 SageCRMRestClient client = 
 new SageCRMBuilder()
 .SetBaseUrl("{http or https}://{server}/sdata/{crm}j/sagecrm2/-/") //this is your base URL in string format
 .SetLoginCredentials("admin", "") //login id and password in clear text
 .Build(); //returns an instance of the SageCRMImplementation class
 
+```
 ## Special Methods
 List of the methods on the Interface that will be available.
 
