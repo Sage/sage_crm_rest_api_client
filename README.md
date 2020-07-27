@@ -6,16 +6,17 @@ For references please see [REST API References](https://help.sagecrm.com/2020-r1
 ## Usage
 
 Usings that are required:
--using Sage.CRM.Rest.Api.Interface;
--using Sage.CRM.Rest.Api.Models;
+- using Sage.CRM.Rest.Api.Interface;
+- using Sage.CRM.Rest.Api.Models;
 
 The Models are only required if you are not going to use generics and use the Models from the project rather.
 
 ## Creating the client usage
-SageCRMRestClient client = new SageCRMBuilder()
-                              .SetBaseUrl("{http or https}://{server}/sdata/{crm}j/sagecrm2/-/") //this is your base URL in string format
-                              .SetLoginCredentials("admin", "") //login id and password in clear text
-                              .Build(); //returns an instance of the SageCRMImplementation class
+SageCRMRestClient client = 
+new SageCRMBuilder()
+.SetBaseUrl("{http or https}://{server}/sdata/{crm}j/sagecrm2/-/") //this is your base URL in string format
+.SetLoginCredentials("admin", "") //login id and password in clear text
+.Build(); //returns an instance of the SageCRMImplementation class
 
 ## Special Methods
 List of the methods on the Interface that will be available.
@@ -27,16 +28,16 @@ Iteration can be done on *EntityList* property.  This will return EntityName and
 **GetEntityFields()**
 This is similar to the GetAllEntities, but should only be used to get field names for an entity specified. 
 
-Get => Get
-Add => Post
-Edit => Put
-Delete => Delete
+- Get => Get
+- Add => Post
+- Edit => Put
+- Delete => Delete
 
 ## Using Methods
-var proto = await client.GetAllEntities();
-var entities = await client.GetEntityFields("address");
-var resultPayload = await client.Get("company");
-var resultPayload2 = await client.Get("company", 1222);
-var result = await client.Add({company object}, "company");
-await client.Edit(1231, put, "company");
-await client.Delete<Company>(1231);
+- var proto = await client.GetAllEntities();
+- var entities = await client.GetEntityFields("address");
+- var resultPayload = await client.Get("company");
+- var resultPayload2 = await client.Get("company", 1222);
+- var result = await client.Add({company object}, "company");
+- await client.Edit(1231, put, "company");
+- await client.Delete<Company>(1231);
