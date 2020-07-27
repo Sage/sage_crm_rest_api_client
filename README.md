@@ -42,6 +42,9 @@ This is similar to the GetAllEntities, but should only be used to get field name
 - var result = await client.Add({company object}, "company");
 - await client.Edit(1231, put, "company");
 - await client.Delete<Company>(1231);
+  
+## Important note
+When using custom classes (for generics) like in the example of local models, if the class does not have the correct $key field or other required fields, the return type cannot be matched correctly and will not return the key/entity id in the return payload. This can be avoided by setting up the POCO's correctly with the matching json tags. If no key/id is returned, then you will have a hard time getting the added entity record back
 
 ## More to come
 - A blogpost on [Sage City](https://www.sagecity.com/) will be released shortly and a link will be added here to explain the usage in more detail
