@@ -1,10 +1,9 @@
-#Sage CRM Rest Client Sample project
-######This project is to help with the Sage CRM REST API usage. This is just some examples and a client that uses the code in a console application
-that you can use to test
+# Sage CRM Rest Client Sample project
+###### This project is to help with the Sage CRM REST API usage. This is just some examples and a client that uses the code in a console application that you can use to test
 
 For references please see [REST API References](https://help.sagecrm.com/2020-r1/RestApiReference/).
 
-##Usage
+## Usage
 
 Usings that are required:
 -using Sage.CRM.Rest.Api.Interface;
@@ -12,19 +11,19 @@ Usings that are required:
 
 The Models are only required if you are not going to use generics and use the Models from the project rather.
 
-######Creating the client usage
+###### Creating the client usage
 SageCRMRestClient client = new SageCRMBuilder()
                                             .SetBaseUrl("{http or https}://{server}/sdata/{crm}j/sagecrm2/-/") //this is your base URL in string format
                                             .SetLoginCredentials("admin", "") //login id and password in clear text
                                             .Build(); //returns an instance of the SageCRMImplementation class
 
-######Special Methods
+###### Special Methods
 List of the methods on the Interface that will be available.
 
-GetAllEntities()
+*GetAllEntities()*
 This returns a list of all entities exposed to web services.  Iteration can be done on *EntityList* property.  This will return EntityName and EntityID with a Dictionary object containing <string,Field>
 
-GetEntityFields()
+*GetEntityFields()*
 This is similar to the GetAllEntities, but should only be used to get field names for an entity specified. 
 
 Get => Get
@@ -32,7 +31,7 @@ Add => Post
 Edit => Put
 Delete => Delete
 
-######Using Methods
+###### Using Methods
 var proto = await client.GetAllEntities();
 var entities = await client.GetEntityFields("address");
 var resultPayload = await client.Get("company");
